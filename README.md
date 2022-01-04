@@ -6,17 +6,17 @@ Find more information here in my blog post: https://herrhozi.com/2022/01/04/as2g
 ## Quick Start Guide
 Open a Admin PowerShell terminal from the Windows command.
 
-The following command will automatically a set of users based on the current date.
+The following command will automatically create a set of users based on the current date.
 ```PowerShell
 AS2GO-create-users.ps1
 ```
 
-The following command will automatically a set of users based on the current date and time 
+The following command will automatically create a set of users based on the current date and time 
 ```PowerShell
 AS2GO-create-users.ps1 -Shortname n
 ```
 
-The following command will automatically a set of users based on an predefined name
+The following command will automatically create a set of users based on an predefined name
 ```PowerShell
 AS2GO-create-users.ps1 -Shortname HerrHozi
 ```
