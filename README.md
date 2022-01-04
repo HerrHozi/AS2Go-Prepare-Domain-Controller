@@ -1,7 +1,7 @@
 # AS2Go-Setup-Domain-Controller
 Files to prepare the AS2GO | Domain Controller Setup
 
-Find more information here in my blog post: https://herrhozi.com/2022/01/04/as2go-lab-setup-domain-controller/
+Find more information here in my blog post  * [Next.js](https://herrhozi.com/2022/01/04/as2go-lab-setup-domain-controller/): 
 
 ## Quick Start Guide
 Open a Admin PowerShell terminal from the Windows command.
