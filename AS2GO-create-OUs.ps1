@@ -8,7 +8,7 @@
 
 #define the AS2Go & Sensitive Account Organisation Unit
 $AS2GoOU = "AS2Go"
-$SenAcOU = "Sensitve Accounts"
+$SenAcOU = "Sensitive Accounts"
 
 # define the AS2Go Group Names
 $VIGroup = "SG-AS2Go-Victims"            # member of local admins on VICTIM PC
@@ -45,9 +45,9 @@ Get-ADGroup -LDAPFilter "(sAMAccountName=SG-AS2Go*)" -Properties canonicalName, 
 Write-Host "Creating OUs for Sensitive Accounts ...." -ForegroundColor Yellow
 
 
-New-ADOrganizationalUnit -Name  $SenAcOU         -Path "$RootOU"             -Description "Sensitve Accounts" 
-New-ADOrganizationalUnit -Name "Sensitve Users"  -Path "OU=$SenAcOU,$RootOU" -Description "Denied for $VIGroup" 
-New-ADOrganizationalUnit -Name "Sensitve Groups" -Path "OU=$SenAcOU,$RootOU" -Description "Denied for $VIGroup" 
+New-ADOrganizationalUnit -Name  $SenAcOU         -Path "$RootOU"             -Description "Sensitive Accounts" 
+New-ADOrganizationalUnit -Name "Sensitive Users"  -Path "OU=$SenAcOU,$RootOU" -Description "Denied for $VIGroup" 
+New-ADOrganizationalUnit -Name "Sensitive Groups" -Path "OU=$SenAcOU,$RootOU" -Description "Denied for $VIGroup" 
 
 
 #List new Gorups
@@ -56,10 +56,10 @@ New-ADOrganizationalUnit -Name "Sensitve Groups" -Path "OU=$SenAcOU,$RootOU" -De
 
 Write-Host "Moving Sensitive Groups ...." -ForegroundColor Yellow
 
-Get-ADGroup -LDAPFilter "(sAMAccountName=Domain Admins)" | Move-ADObject -TargetPath "OU=Sensitve Groups,OU=$SenAcOU,$RootOU"
-Get-ADGroup -LDAPFilter "(sAMAccountName=Schema Admins)" | Move-ADObject -TargetPath "OU=Sensitve Groups,OU=$SenAcOU,$RootOU"
-Get-ADGroup -LDAPFilter "(sAMAccountName=Enterprise Admins)" | Move-ADObject -TargetPath "OU=Sensitve Groups,OU=$SenAcOU,$RootOU"
-Get-ADGroup -LDAPFilter "(sAMAccountName=Group Policy Creator Owners)" | Move-ADObject -TargetPath "OU=Sensitve Groups,OU=$SenAcOU,$RootOU"
+Get-ADGroup -LDAPFilter "(sAMAccountName=Domain Admins)" | Move-ADObject -TargetPath "OU=Sensitive Groups,OU=$SenAcOU,$RootOU"
+Get-ADGroup -LDAPFilter "(sAMAccountName=Schema Admins)" | Move-ADObject -TargetPath "OU=Sensitive Groups,OU=$SenAcOU,$RootOU"
+Get-ADGroup -LDAPFilter "(sAMAccountName=Enterprise Admins)" | Move-ADObject -TargetPath "OU=Sensitive Groups,OU=$SenAcOU,$RootOU"
+Get-ADGroup -LDAPFilter "(sAMAccountName=Group Policy Creator Owners)" | Move-ADObject -TargetPath "OU=Sensitive Groups,OU=$SenAcOU,$RootOU"
 
 #Get-adgroup -Filter {name -like 'sg-as2go*'} | Move-ADObject -TargetPath "OU=Groups,OU=$AS2GoOU,$RootOU"
 
@@ -69,6 +69,6 @@ Get-ADGroup -LDAPFilter "(Description=Designated administrators of the*)" -Prope
 
 
 Write-Host "`n Done! Please do NOT forget to set the DENY right for group '$VIGroup' on Organization Unit:" -ForegroundColor Yellow
-Write-Host "`n --> OU=Sensitve Groups,OU=$SenAcOU,$RootOU`n" -ForegroundColor Yellow
+Write-Host "`n --> OU=Sensitive Groups,OU=$SenAcOU,$RootOU`n" -ForegroundColor Yellow
 
 dsa.msc
