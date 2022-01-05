@@ -114,7 +114,7 @@ new-aduser -UserPrincipalName $sUserPrincipalName -Name $sName -SamAccountName $
 
 $sDepartment = "STU"
 $sTitle = "SCI TS"
-$sCompany = "M365 Defender (Germany)"
+$sCompany = "Herr HoZi (Germany)"
 $sCity = "Cologne"
 $sCountry = "DE"
 $sCo = "Germany"
