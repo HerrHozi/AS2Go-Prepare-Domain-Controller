@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-Create three accounts (Victim, Helpdesk & Domain Admin) for the MDI Demo.
+Create three accounts (Victim, Helpdesk & Domain Admin) for the attack demo.
 
 .DESCRIPTION
 
@@ -9,7 +9,7 @@ Based on the Tutorial: Setup a Microsoft Defender for Identity security alert la
 
 .NOTES
 
-last update: 2022-01-01
+last update: 2022-01-05
 File Name  : AS2Go-create-users.ps1
 Author     : Holger Zimmermann | hozimmer@microsoft.com
 
@@ -37,12 +37,12 @@ PS> .\AS2GO-create-users.ps1
 PS> .\AS2GO-create-users.ps1 -Shortname n
 
 .EXAMPLE
-PS> .\AS2GO-create-users.ps1 -Shortname AS2Go
+PS> .\AS2GO-create-users.ps1 -Shortname HerrHoZi
 
 
 .EXAMPLE
 PS> .\AS2GO-create-users.ps1 -DomainAdmin y -HelpDesk y -Victim n -Shortname AS2Go
-creates the only the domain admin & help desk account with a dedicated name, da-AS2Go & hd-AS2Go
+creates the only the domain admin & help desk account with an dedicated name, da-AS2Go & hd-AS2Go
 
 
 
@@ -69,23 +69,22 @@ $logfile = "$PoSHPath\$scriptName.log"
 
 # OU Path for new Users
 $sPath = "OU=Users,OU=AS2Go,DC=sandbox,DC=corp"
-$sUPNSuffix = "@m365defender.de"
+$sUPNSuffix = "@HerrHozi.com"
 
 # Store the user passwords as variables
 $DASecurePass = ConvertTo-SecureString -String '1q2w3e$Rda' -AsPlainText -Force
 $HDSecurePass = ConvertTo-SecureString -String '1q2w3e$Rhd' -AsPlainText -Force
 $VISecurePass = ConvertTo-SecureString -String '1q2w3e$Rvi' -AsPlainText -Force
 
+# Manager's must exist in the AD
+$DAManager = "Holger"
+$HDManager = "HoZi"
+$VIManager = "Zimbo"
+
 # User thumbnail Photo
 $DAPhoto = "$PoSHPath\mdi-admin.jpg"
 $HDPhoto = "$PoSHPath\mdi-helpdesk.jpg"
 $VIPhoto = "$PoSHPath\mdi-victim.jpg"
-
-# Manager's
-$DAManager = "Anna"
-$HDManager = "Frank"
-$VIManager = "Paul"
-
 
 # Active Directory Security Groups
 $VIGroup = "SG-AS2Go-Victims"            # member of local admins on VICTIM PC
@@ -133,7 +132,7 @@ $sStreet = "Am Holzmarkt 2a"
 $sOffice = "RO Köln"
 $sEmployeeNumber = ($sLastname + $sFirstName)
 $sEmployeeId = ($sLastname + $sFirstName)
-$sHomePage =  "https://www.m365-usecases.de"
+$sHomePage =  "https://HerrHozi.com"
 
 Set-ADUser -identity $sSamaccountName -State $sState -Office $sOffice  -StreetAddress $sStreet  -MobilePhone $sMobile -OfficePhone $sOfficePhone  -Department $sDepartment -Title $sTitle -Company $sCompany -City $sCity  -PostalCode $sZipCode -Country $sCountry -Description $sDescription -EmployeeID $sEmployeeID -EmployeeNumber $sEmployeeNumber -HomePage $sHomePage 
 Set-ADUser –Identity $sSamaccountName –Replace @{countryCode=$scountryCode}
@@ -193,7 +192,7 @@ if ($Victim -eq 'y')
   
 if ($HelpDesk -eq 'y')
   {
-  # create Helpdesk User (Ron HelpDesk)
+  # create Helpdesk User (like Ron HelpDesk)
   # =========================================
 
 $sUserPrincipalName = "HD-" + $sNewUserPrincipalName
