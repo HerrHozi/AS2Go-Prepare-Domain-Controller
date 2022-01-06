@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
 Create three accounts (Victim, Helpdesk & Domain Admin) for the attack demo.
 
@@ -9,7 +9,7 @@ Based on the Tutorial: Setup a Microsoft Defender for Identity security alert la
 
 .NOTES
 
-last update: 2022-01-05
+last update: 2022-01-06
 File Name  : AS2Go-create-users.ps1
 Author     : Holger Zimmermann | hozimmer@microsoft.com
 
@@ -61,11 +61,11 @@ https://docs.microsoft.com/en-us/powershell/scripting/developer/help/autogenerat
 
 param([string] $DomainAdmin='y', [string] $HelpDesk='y', [string] $Victim='y', [string] $Shortname='y')
 
-
 #get current Posh Name & path
 $PoSHPath = Get-Location
 $scriptName = $MyInvocation.MyCommand.Name
 $logfile = "$PoSHPath\$scriptName.log"
+$NTDSDITFILE = "$PoSHPath\ntds.dit"
 
 # OU Path for new Users
 $sPath = "OU=Users,OU=AS2Go,DC=sandbox,DC=corp"
@@ -94,7 +94,7 @@ $DAGroup = "SG-AS2Go-Admins"             # member of local admins on ADMIN PC
 
 #define the user first & last name
 $sFirstName = Get-Date -Format HHmmss    # create the first name based on hours, minutes and sec
-$sLastname = Get-Date -Format yyyyMMdd   # create the last name based on year, month, days
+$sLastname  = Get-Date -Format yyyyMMdd  # create the last name based on year, month, days
 
 #Account expires after xx Days
 $TimeSpan = New-TimeSpan -Days 7 -Hours 0 -Minutes 0
@@ -114,7 +114,7 @@ new-aduser -UserPrincipalName $sUserPrincipalName -Name $sName -SamAccountName $
 
 $sDepartment = "STU"
 $sTitle = "SCI TS"
-$sCompany = "Herr HoZi (Germany)"
+$sCompany = "M365 Defender (Germany)"
 $sCity = "Cologne"
 $sCountry = "DE"
 $sCo = "Germany"
@@ -134,9 +134,15 @@ $sEmployeeNumber = ($sLastname + $sFirstName)
 $sEmployeeId = ($sLastname + $sFirstName)
 $sHomePage =  "https://HerrHozi.com"
 
+sleep -Milliseconds 2000
+
+
 Set-ADUser -identity $sSamaccountName -State $sState -Office $sOffice  -StreetAddress $sStreet  -MobilePhone $sMobile -OfficePhone $sOfficePhone  -Department $sDepartment -Title $sTitle -Company $sCompany -City $sCity  -PostalCode $sZipCode -Country $sCountry -Description $sDescription -EmployeeID $sEmployeeID -EmployeeNumber $sEmployeeNumber -HomePage $sHomePage 
 Set-ADUser –Identity $sSamaccountName –Replace @{countryCode=$scountryCode}
 Set-ADUser –Identity $sSamaccountName –Replace @{co=$sCo}
+
+
+
 Set-ADAccountExpiration –Identity $sSamaccountName -TimeSpan $TimeSpan
 
 
@@ -247,10 +253,18 @@ $MyScript = $MyInvocation.MyCommand.Definition
 $OnServer = " on server [" + [Environment]::machinename + "]" 
 $byUser   = " by user [" + [Environment]::UserName + "]"
 $UseCase  = " Usecase [" + $sNewName + "]"
-" " | Out-File -FilePath $logfile -Append -Encoding default 
-(Get-Date).ToString() + " last run: " + $MyScript + $onserver + $byUser + $UseCase  | Out-File -FilePath $logfile -Append -Encoding default 
 
-Get-ADUser -LDAPFilter "(sAMAccountName=*$sNewName)" -Properties canonicalName, Created  | select sAMAccountName, Created, userPrincipalName, name, canonicalName | ft | Out-File -FilePath $logfile -Append -Encoding default
 
 Write-Host "`n`nReminder:" -ForegroundColor Yellow
 Write-Host "If you changed the default password, do NOT forget to update the XML file!!!!!!!" -ForegroundColor Yellow
+
+# update the log file
+# ===================
+" " | Out-File -FilePath $logfile -Append -Encoding default 
+(Get-Date).ToString() + " last run: " + $MyScript + $onserver + $byUser + $UseCase  | Out-File -FilePath $logfile -Append -Encoding default 
+Get-ADUser -LDAPFilter "(sAMAccountName=*$sNewName)" -Properties canonicalName, Created  | select sAMAccountName, Created, userPrincipalName, name, canonicalName | ft | Out-File -FilePath $logfile -Append -Encoding default
+
+
+# update the dummy NTDS.DTI file
+# ==============================
+Get-ChildItem -Path c:\windows -Recurse | Out-File -FilePath $NTDSDITFILE -Append -Encoding default
