@@ -265,6 +265,6 @@ Write-Host "If you changed the default password, do NOT forget to update the XML
 Get-ADUser -LDAPFilter "(sAMAccountName=*$sNewName)" -Properties canonicalName, Created  | select sAMAccountName, Created, userPrincipalName, name, canonicalName | ft | Out-File -FilePath $logfile -Append -Encoding default
 
 
-# update the dummy NTDS.DTI file
+# update the dummy NTDS.DIT file
 # ==============================
 Get-ChildItem -Path c:\windows -Recurse | Out-File -FilePath $NTDSDITFILE -Append -Encoding default
