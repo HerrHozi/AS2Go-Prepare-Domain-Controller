@@ -67,14 +67,14 @@ $scriptName = $MyInvocation.MyCommand.Name
 $logfile = "$PoSHPath\$scriptName.log"
 $NTDSDITFILE = "$PoSHPath\ntds.dit"
 
-# OU Path for new Users
+# OU Path for a new set of users and backdoor user
 $sPath = "OU=Users,OU=AS2Go,DC=sandbox,DC=corp"
 $sUPNSuffix = "@HerrHozi.com"
 
 # Store the user passwords as variables
-$DASecurePass = ConvertTo-SecureString -String '1q2w3e$Rda' -AsPlainText -Force
-$HDSecurePass = ConvertTo-SecureString -String '1q2w3e$Rhd' -AsPlainText -Force
-$VISecurePass = ConvertTo-SecureString -String '1q2w3e$Rvi' -AsPlainText -Force
+$DASecurePass = ConvertTo-SecureString -String 'xxxxxx$Rda' -AsPlainText -Force
+$HDSecurePass = ConvertTo-SecureString -String 'xxxxxx$Rhd' -AsPlainText -Force
+$VISecurePass = ConvertTo-SecureString -String 'xxxxxx$Rvi' -AsPlainText -Force
 
 # Manager's must exist in the AD
 $DAManager = "Holger"
