@@ -107,9 +107,9 @@ $Tier2Dscpt = "Tier 2 Assets"
 
 Function New-RandomPassword { 
 
-$Hozi  = "HERRHOZI".ToCharArray()
-$chars = "abcdefghijkmnopqrstuvwxyzABCEFGHJKLMNPQRSTUVWXYZ1234567890".ToCharArray()
-$nums = "1234567890".ToCharArray()
+$Hozi   = "HERRHOZI".ToCharArray()
+$chars  = "abcdefghijkmnopqrstuvwxyzABCEFGHJKLMNPQRSTUVWXYZ1234567890".ToCharArray()
+$nums   = "1234567890".ToCharArray()
 $schars = "+-$!".ToCharArray()
 
 $newPassword = ""
@@ -286,9 +286,9 @@ $trustee = get-adgroup $group
 $sid = [System.Security.Principal.SecurityIdentifier] $trustee.SID
  
 # Create a new access control entry to allow access to the OU
-$identity = [System.Security.Principal.IdentityReference] $SID
-$adRights = [System.DirectoryServices.ActiveDirectoryRights] "GenericAll"
-$type = [System.Security.AccessControl.AccessControlType] "DENY"
+$identity        = [System.Security.Principal.IdentityReference] $SID
+$adRights        = [System.DirectoryServices.ActiveDirectoryRights] "GenericAll"
+$type            = [System.Security.AccessControl.AccessControlType] "DENY"
 $inheritanceType = [System.DirectoryServices.ActiveDirectorySecurityInheritance] "All"
  
 $ACE = New-Object System.DirectoryServices.ActiveDirectoryAccessRule $identity,$adRights,$type,$inheritanceType
