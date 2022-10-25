@@ -72,11 +72,10 @@ $RootOU = $ADRoot.defaultNamingContext
 
 
  $AS2GoUser = @(
-       [pscustomobject]@{Path = "OU=Accounts,OU=Tier 0 Assets,OU=AS2Go,$RootOU"; Manager = $DAGroupDscpt}
-       [pscustomobject]@{Path = "OU=Accounts,OU=Tier 1 Assets,OU=AS2Go,$RootOU"; Manager = $HDGroupDscpt}
-       [pscustomobject]@{Path = "OU=Accounts,OU=Tier 2 Assets,OU=AS2Go,$RootOU"; Manager = $VIGroupDscpt}
+       [pscustomobject]@{Path = "OU=Accounts,OU=Tier 0 Assets,OU=AS2Go,$RootOU"; ComputerPath = "OU=Devices,OU=Tier 0 Assets,OU=AS2Go,$RootOU"}
+       [pscustomobject]@{Path = "OU=Accounts,OU=Tier 1 Assets,OU=AS2Go,$RootOU"; ComputerPath = "OU=Devices,OU=Tier 1 Assets,OU=AS2Go,$RootOU"}
+       [pscustomobject]@{Path = "OU=Accounts,OU=Tier 2 Assets,OU=AS2Go,$RootOU"; ComputerPath = "OU=Devices,OU=Tier 2 Assets,OU=AS2Go,$RootOU"}
    )
-
 
 
 # OU Path for new Users
@@ -109,6 +108,9 @@ $sLastname  = Get-Date -Format yyyyMMdd  # create the last name based on year, m
 
 #Account expires after xx Days
 $TimeSpan = New-TimeSpan -Days 7 -Hours 0 -Minutes 0
+
+#Service to create SPN
+$services = ("HTTPS","FTP","CIFS","kafka","MSSQL","POP3","HTTP")
 
 Import-Module ActiveDirectory
 
@@ -241,6 +243,15 @@ if ($DomainAdmin -eq 'y')
   Set-ADUser $sName -Replace @{thumbnailPhoto=([byte[]](Get-Content $bthumbnailPhoto -Encoding byte))} -Manager $DAManager -Initials "DA" -Title "Domain Admin" -Department "Tier 0"
   Write-Host "... created new user - $sName | Domain Admin"
 
+  #create new computer
+  $NewComputer = "PC-T"+ $Tier+ "-" + (Get-Date -Format HHmmssff)
+  New-ADComputer -Name $NewComputer -Description "needed for Kerberoasting Attack" -Path $AS2GoUser[0].ComputerPath  -Location $sNewName
+  
+  #set ServicePrincipalNames
+  $service = $services | get-Random
+  $NewSPN = "$service/$NewComputer"
+  Set-ADUser -Identity $sName -ServicePrincipalNames @{Add=$NewSPN} 
+  
   }
 
 
@@ -248,10 +259,13 @@ if ($DomainAdmin -eq 'y')
 # SUMMMARY
 # ========
 $attributes = @("sAMAccountName","Created","userPrincipalName","name","canonicalName","department","memberof")
+$attributes1 = @("name","Created","name","canonicalName","description","location")
  
 Write-Host "`n`nSUMMARY:" -ForegroundColor Green
 Write-Host     "========" -ForegroundColor Green
 Get-ADUser -LDAPFilter "(sAMAccountName=*$sNewName)" -Properties $attributes | select $attributes | ft
+
+Get-ADComputer -LDAPFilter "(location=$sNewName)" -Properties $attributes1 | select $attributes1 | ft
 
 
 $MyScript = $MyInvocation.MyCommand.Definition
