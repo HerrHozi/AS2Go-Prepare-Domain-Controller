@@ -112,10 +112,6 @@ $sLastname  = Get-Date -Format yyyyMMdd  # create the last name based on year, m
 #Account expires after xx Days
 $TimeSpan = New-TimeSpan -Days 7 -Hours 0 -Minutes 0
 
-
-
-
-
 Import-Module ActiveDirectory
 
 
@@ -140,6 +136,8 @@ New-aduser -UserPrincipalName $sUserPrincipalName -Name $sName -SamAccountName $
 
   $UserProperties = @{
   "mobile"            = Get-Date -Format HHmmssffff
+  "telephoneNumber"   = Get-Date -Format HHmmssffff
+  "employeenumber"    = Get-Date -Format HHmmssffff
   "GivenName"         = $sFirstName
   "sn"                = $sLastname
   "DisplayName"       = $sDisplayName
@@ -150,15 +148,12 @@ New-aduser -UserPrincipalName $sUserPrincipalName -Name $sName -SamAccountName $
   "co"                = "Germany"
   "l"                 = "somewhere in Germany"
   "wWWHomePage"       = "https://HerrHozi.com"
-  "telephoneNumber"   = Get-Date -Format HHmmssffff
-  "employeenumber"    = Get-Date -Format HHmmssffff
+  "physicalDeliveryOfficeName" = "AS2Go Use Case"
   }
 
 sleep -Milliseconds 1000
 Set-ADUser -Identity $sSamaccountName  -Replace $UserProperties 
 Set-ADAccountExpiration –Identity $sSamaccountName -TimeSpan $TimeSpan
-
-
 }
 
 
@@ -222,7 +217,7 @@ if ($HelpDesk -eq 'y')
   NewMDIUser -sUserPrincipalName $sUserPrincipalName -sName $sName -sSamaccountName $sSamAccountName -sFirstName $sFirstName -sLastname $sLastname -sDisplayName $sDisplayName -sPath $sPath -secure_string_pwd $HDSecurePass
   $sName = $sSamAccountName
   Add-ADGroupMember -Identity $HDGroup  -Members $sName
-  Set-ADUser $sName -Replace @{thumbnailPhoto=([byte[]](Get-Content $bthumbnailPhoto -Encoding byte))} -Manager $HDManager -Initials "HD" -Title "Helpdesk" -Department "Tier 1" -PasswordNeverExpires $true
+  Set-ADUser $sName -Replace @{thumbnailPhoto=([byte[]](Get-Content $bthumbnailPhoto -Encoding byte))} -Manager $HDManager -Initials "HD" -Title "Helpdesk" -Department "Tier 1"
   Write-Host "... created new user - $sName | Helpdesk User"
   }
 
@@ -232,18 +227,18 @@ if ($DomainAdmin -eq 'y')
   # create Domain Admin User (like DA-HerrHozi)
   # =============================================
 
-  $sUserPrincipalName = "DA-" + $sNewUserPrincipalName
-  $sName = $sNewName + "-DA"
-  $sSamAccountName = "DA-" + $sNewName
-  $sDisplayName = ("Domain Admin ($sSamAccountName)")
-  $bthumbnailPhoto = $DAPhoto
+  $sUserPrincipalName  = "DA-" + $sNewUserPrincipalName
+  $sName               = $sNewName + "-DA"
+  $sSamAccountName     = "DA-" + $sNewName
+  $sDisplayName        = ("Domain Admin ($sSamAccountName)")
+  $bthumbnailPhoto     = $DAPhoto
   $sPath               = $AS2GoUser[0].Path
 
   NewMDIUser -sUserPrincipalName $sUserPrincipalName -sName $sName -sSamaccountName $sSamAccountName -sFirstName $sFirstName -sLastname $sLastname -sDisplayName $sDisplayName -sPath $sPath -secure_string_pwd $DASecurePass
 
   $sName = $sSamAccountName
-
-  Add-ADGroupMember -Identity "Domain Admins" -Members $sName
+  $DomainAdmins =  (Get-ADGroup -Filter * -Properties * | where {($_.SID -like "*-512")}).name
+  Add-ADGroupMember -Identity $DomainAdmins -Members $sName
   Add-ADGroupMember -Identity $DAGroup -Members $sName
 
   Set-ADUser $sName -Replace @{thumbnailPhoto=([byte[]](Get-Content $bthumbnailPhoto -Encoding byte))} -Manager $DAManager -Initials "DA" -Title "Domain Admin" -Department "Tier 0"
@@ -255,7 +250,7 @@ if ($DomainAdmin -eq 'y')
 
 # SUMMMARY
 # ========
-$attributes = @("sAMAccountName","Created","userPrincipalName","name","canonicalName","department")
+$attributes = @("sAMAccountName","Created","userPrincipalName","name","canonicalName","department","memberof")
  
 Write-Host "`n`nSUMMARY:" -ForegroundColor Green
 Write-Host     "========" -ForegroundColor Green
