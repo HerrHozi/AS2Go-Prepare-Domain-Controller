@@ -15,6 +15,7 @@ Author     : Holger Zimmermann | @HerrHozi
 
 
 .PARAMETER Shortname
+
 Define the name for the accounts. "y" is the default.
 Y - yyyyMMdd
 N - yyyyMMdd.hhmmss
@@ -58,9 +59,9 @@ https://docs.microsoft.com/en-us/defender-for-identity/playbook-setup-lab
 param([string] $DomainAdmin='y', [string] $HelpDesk='y', [string] $Victim='y', [string] $Shortname='y')
 
 #get current Posh Name & path
-$PoSHPath = Get-Location
-$scriptName = $MyInvocation.MyCommand.Name
-$logfile = "$PoSHPath\$scriptName.log"
+$PoSHPath    = Get-Location
+$scriptName  = $MyInvocation.MyCommand.Name
+$logfile     = "$PoSHPath\$scriptName.log"
 $NTDSDITFILE = "$PoSHPath\ntds.dit"
 
 
@@ -68,8 +69,6 @@ $NTDSDITFILE = "$PoSHPath\ntds.dit"
 $ADRoot = Get-ADRootDSE
 $Domain = Get-ADDomain
 $RootOU = $ADRoot.defaultNamingContext
-
-
 
 
  $AS2GoUser = @(
@@ -103,7 +102,6 @@ $VIPhoto = "$PoSHPath\mdi-victim.jpg"
 $VIGroup = "SG-AS2Go-Victims"            # member of local admins on VICTIM PC
 $HDGroup = "SG-AS2Go-HelpDesk"           # member of local admins on ADMIN PC & VICTIM PC
 $DAGroup = "SG-AS2Go-Admins"             # member of local admins on ADMIN PC
-
 
 #define the user first & last name
 $sFirstName = Get-Date -Format HHmmssff  # create the first name based on hours, minutes, seconds & milli seconds
@@ -148,7 +146,7 @@ New-aduser -UserPrincipalName $sUserPrincipalName -Name $sName -SamAccountName $
   "co"                = "Germany"
   "l"                 = "somewhere in Germany"
   "wWWHomePage"       = "https://HerrHozi.com"
-  "physicalDeliveryOfficeName" = "AS2Go Use Case"
+  "physicalDeliveryOfficeName" = "AS2Go Lab"
   }
 
 sleep -Milliseconds 1000
@@ -176,15 +174,14 @@ else
 
 $sNewUserPrincipalName = ($sNewName + $sUPNSuffix)
 
-#clear-host
 
-Write-Host "`nStart creating 3 users for usecase '$sNewName'. Accounts expire after $TimeSpan days`n" -ForegroundColo Yellow
+Write-Host "`nStart creating 3 users for use case '$sNewName'. Accounts expire after $TimeSpan days`n" -ForegroundColo Yellow
 
 
 if ($Victim -eq 'y')
   {
- # create Victim User (like VI-HerrHozi)
- # =========================================
+  # create Victim User (like VI-HerrHozi)
+  # =========================================
 
   $sUserPrincipalName  = "VI-" + $sNewUserPrincipalName
   $sName               = $sNewName + "-VI"
