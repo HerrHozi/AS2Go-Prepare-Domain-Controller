@@ -42,13 +42,13 @@ PS> .\AS2GO-create-users.ps1 -Shortname HerrHoZi
 
 
 .EXAMPLE
-PS> .\AS2GO-create-users.ps1 -DomainAdmin y -HelpDesk y -Victim n -Shortname AS2Go
-creates the only the domain admin & help desk account with an dedicated name, da-AS2Go & hd-AS2Go
+PS> .\AS2GO-create-users.ps1 -DomainAdmin y -HelpDesk y -Victim n -Shortname HerrHoZi
+creates the only the domain admin & help desk account with an dedicated name, DA-HerrHoZi & HD-HerrHoZi
 
 
 
 .LINK
-https://docs.microsoft.com/en-us/defender-for-identity/playbook-setup-lab
+https://herrhozi.com
 #>
 
 #Check if the current Windows PowerShell session is running as Administrator. 
@@ -289,9 +289,7 @@ if ($DomainAdmin -eq 'y')
 # SUMMMARY
 # ========
 
-
-#$sNewName = "hip2023"
-
+#$sNewName = "paul06"
 $attributesU = @("samaccountname","servicePrincipalName","name","canonicalName","department","memberof")
 $attributesC = @("samaccountname","servicePrincipalName","name","canonicalName","description")
  
