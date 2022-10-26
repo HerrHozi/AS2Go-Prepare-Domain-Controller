@@ -289,9 +289,11 @@ if ($DomainAdmin -eq 'y')
 # SUMMMARY
 # ========
 
-$sNewName = "paul06"
-$attributesU = @("Created","samaccountname","servicePrincipalName","canonicalName","name","department","memberof")
-$attributesC = @("Created","samaccountname","servicePrincipalName","canonicalName","name","description")
+
+#$sNewName = "hip2023"
+
+$attributesU = @("samaccountname","servicePrincipalName","name","canonicalName","department","memberof")
+$attributesC = @("samaccountname","servicePrincipalName","name","canonicalName","description")
  
 Write-Host "`n`nSUMMARY for new User & Computer Objects:" -ForegroundColor Yellow
 Write-Host     "========================================" -ForegroundColor Yellow
