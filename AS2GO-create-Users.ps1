@@ -72,7 +72,7 @@ $RootOU = $ADRoot.defaultNamingContext
 
 
  $AS2GoUser = @(
-       [pscustomobject]@{Path = "OU=Accounts,OU=Tier 0 Assets,OU=AS2Go,$RootOU"; ComputerPath = "OU=Devices,OU=Tier 0 Assets,OU=AS2Go,$RootOU"}
+       [pscustomobject]@{Path = "OU=Accounts,OU=Tier 0 Assets,OU=AS2Go,$RootOU"; ComputerPath = "OU=Tier 0 Servers,OU=Tier 0 Assets,OU=AS2Go,$RootOU"}
        [pscustomobject]@{Path = "OU=Accounts,OU=Tier 1 Assets,OU=AS2Go,$RootOU"; ComputerPath = "OU=Devices,OU=Tier 1 Assets,OU=AS2Go,$RootOU"}
        [pscustomobject]@{Path = "OU=Accounts,OU=Tier 2 Assets,OU=AS2Go,$RootOU"; ComputerPath = "OU=Devices,OU=Tier 2 Assets,OU=AS2Go,$RootOU"}
    )
@@ -213,11 +213,41 @@ if ($HelpDesk -eq 'y')
   $bthumbnailPhoto     = $HDPhoto
   $sPath               = $AS2GoUser[1].Path
 
+  
   NewMDIUser -sUserPrincipalName $sUserPrincipalName -sName $sName -sSamaccountName $sSamAccountName -sFirstName $sFirstName -sLastname $sLastname -sDisplayName $sDisplayName -sPath $sPath -secure_string_pwd $HDSecurePass
   $sName = $sSamAccountName
   Add-ADGroupMember -Identity $HDGroup  -Members $sName
   Set-ADUser $sName -Replace @{thumbnailPhoto=([byte[]](Get-Content $bthumbnailPhoto -Encoding byte))} -Manager $HDManager -Initials "HD" -Title "Helpdesk" -Department "Tier 1"
   Write-Host "... created new user - $sName | Helpdesk User"
+
+
+  # additionally Helpdesk User (HD-HerrHoziP)
+  # member of the protected users group
+    
+  $sUserPrincipalName  = "HD-" + $sNewName + "P" + $sUPNSuffix
+  $sName               = $sNewName + "P-HD"
+  $sSamAccountName     = "HD-" + $sNewName + "P"
+  $sDisplayName        = "Helpdesk User ($sSamAccountName)"
+  $bthumbnailPhoto     = $HDPhoto
+  $sPath               = $AS2GoUser[1].Path
+
+  NewMDIUser -sUserPrincipalName $sUserPrincipalName -sName $sName -sSamaccountName $sSamAccountName -sFirstName $sFirstName -sLastname $sLastname -sDisplayName $sDisplayName -sPath $sPath -secure_string_pwd $HDSecurePass
+  $sName = $sSamAccountName
+  $ProtectedUser =  (Get-ADGroup -Filter * -Properties * | where {($_.SID -like "*-525")}).name
+  Add-ADGroupMember -Identity $ProtectedUser -Members $sName
+  Add-ADGroupMember -Identity $HDGroup  -Members $sName
+  Set-ADUser $sName -Replace @{thumbnailPhoto=([byte[]](Get-Content $bthumbnailPhoto -Encoding byte))} -Manager $HDManager -Initials "HD" -Title "Helpdesk" -Department "Tier 1"
+  Write-Host "... created new user - $sName | Helpdesk User"
+  
+  #create new computer
+  $NewComputer = "PAW-$sNewName"
+  New-ADComputer -Name $NewComputer -Description "needed for Kerberoasting Attack" -Path $AS2GoUser[1].ComputerPath  -Location $sNewName -OperatingSystem "Windows 10 Enterprise"
+
+  #set ServicePrincipalNames to a random service
+  $service = $services | get-Random
+  $NewSPN = "$service/$NewComputer"
+  Set-ADUser -Identity $sName -ServicePrincipalNames @{Add=$NewSPN} 
+
   }
 
  
@@ -243,11 +273,11 @@ if ($DomainAdmin -eq 'y')
   Set-ADUser $sName -Replace @{thumbnailPhoto=([byte[]](Get-Content $bthumbnailPhoto -Encoding byte))} -Manager $DAManager -Initials "DA" -Title "Domain Admin" -Department "Tier 0"
   Write-Host "... created new user - $sName | Domain Admin"
 
-  #create new computer
-  $NewComputer = "PC-T"+ $Tier+ "-" + (Get-Date -Format HHmmssff)
-  New-ADComputer -Name $NewComputer -Description "needed for Kerberoasting Attack" -Path $AS2GoUser[0].ComputerPath  -Location $sNewName
+  #create new computer object
+  $NewComputer = "SRV-$sNewName"
+  New-ADComputer -Name $NewComputer -Description "needed for Kerberoasting Attack" -Path $AS2GoUser[0].ComputerPath  -Location $sNewName -OperatingSystem "Windows Server 2019"
   
-  #set ServicePrincipalNames
+  #set ServicePrincipalNames to a random service
   $service = $services | get-Random
   $NewSPN = "$service/$NewComputer"
   Set-ADUser -Identity $sName -ServicePrincipalNames @{Add=$NewSPN} 
@@ -258,14 +288,16 @@ if ($DomainAdmin -eq 'y')
 
 # SUMMMARY
 # ========
-$attributes = @("sAMAccountName","Created","userPrincipalName","name","canonicalName","department","memberof")
-$attributes1 = @("name","Created","name","canonicalName","description","location")
- 
-Write-Host "`n`nSUMMARY:" -ForegroundColor Green
-Write-Host     "========" -ForegroundColor Green
-Get-ADUser -LDAPFilter "(sAMAccountName=*$sNewName)" -Properties $attributes | select $attributes | ft
 
-Get-ADComputer -LDAPFilter "(location=$sNewName)" -Properties $attributes1 | select $attributes1 | ft
+$sNewName = "paul06"
+$attributesU = @("Created","samaccountname","servicePrincipalName","canonicalName","name","department","memberof")
+$attributesC = @("Created","samaccountname","servicePrincipalName","canonicalName","name","description")
+ 
+Write-Host "`n`nSUMMARY for new User & Computer Objects:" -ForegroundColor Yellow
+Write-Host     "========================================" -ForegroundColor Yellow
+
+Get-ADUser     -LDAPFilter "(sAMAccountName=*$sNewName*)"   -Properties $attributesU | select $attributesU | ft
+Get-ADComputer -LDAPFilter "(sAMAccountName=*-$sNewName*)" -Properties $attributesC | select $attributesC | ft
 
 
 $MyScript = $MyInvocation.MyCommand.Definition
@@ -288,4 +320,3 @@ Get-ADUser -LDAPFilter "(sAMAccountName=*$sNewName)" -Properties canonicalName, 
 # ==============================
 $NTDSDITFILE = "$PoSHPath\ntds.dit"
 Get-ChildItem -Path c:\windows | Out-File -FilePath $NTDSDITFILE -Append -Encoding default 
-
