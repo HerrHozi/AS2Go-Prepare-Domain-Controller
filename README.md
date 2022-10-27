@@ -12,8 +12,7 @@ The following command will automatically create the required OU structure.
 ```PowerShell
 New-AS2GoOus.ps1 
 ```
-
-![image](https://user-images.githubusercontent.com/96825160/198326571-d9003025-6d8e-4609-ae30-b0789e26068f.png)
+![New-AS2GoOUs](https://user-images.githubusercontent.com/96825160/198332993-21f8cd80-513c-4fe5-9a9c-6aa590aa51c6.gif)
 
 
 ### STEP #2 Create a subset of dummy users
