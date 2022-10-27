@@ -31,4 +31,4 @@ The following command will automatically create a set of users based on an prede
 ```PowerShell
 New-AS2GoUsers -Shortname HerrHozi
 ```
-![image](https://user-images.githubusercontent.com/96825160/198323140-8eaba7a1-d5e7-4dea-ad1d-80b4c77f6e9c.png)
+![New-AS2GoUsers](https://user-images.githubusercontent.com/96825160/198341525-9ce6c7bc-3d91-4e6e-b231-0c0a699dc767.gif)
