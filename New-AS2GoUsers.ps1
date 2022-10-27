@@ -9,8 +9,8 @@ Based on the Tutorial: Setup a Microsoft Defender for Identity security alert la
 
 .NOTES
 
-last update: 2022-10-25
-File Name  : AS2Go-create-users.ps1
+last update: 2022-10-27
+File Name  : New-AS2GoUsers.ps1 | Version 2.5.2
 Author     : Holger Zimmermann | @HerrHozi
 
 
@@ -153,10 +153,8 @@ New-aduser -UserPrincipalName $sUserPrincipalName -Name $sName -SamAccountName $
 
 sleep -Milliseconds 1000
 Set-ADUser -Identity $sSamaccountName  -Replace $UserProperties 
-Set-ADAccountExpiration –Identity $sSamaccountName -TimeSpan $TimeSpan
+Set-ADAccountExpiration -Identity $sSamaccountName -TimeSpan $TimeSpan
 }
-
-
 
 If ($Shortname -eq 'y')
 {
@@ -290,14 +288,26 @@ if ($DomainAdmin -eq 'y')
 # ========
 
 #$sNewName = "paul06"
-$attributesU = @("samaccountname","servicePrincipalName","name","canonicalName","department","memberof")
+$attributesU = @("samaccountname","servicePrincipalName","name","canonicalName","department")
 $attributesC = @("samaccountname","servicePrincipalName","name","canonicalName","description")
  
-Write-Host "`n`nSUMMARY for new User & Computer Objects:" -ForegroundColor Yellow
+Write-Host "`n`nSUMMARY for new User + Computer Objects:" -ForegroundColor Yellow
 Write-Host     "========================================" -ForegroundColor Yellow
 
-Get-ADUser     -LDAPFilter "(sAMAccountName=*$sNewName*)"   -Properties $attributesU | select $attributesU | ft
 Get-ADComputer -LDAPFilter "(sAMAccountName=*-$sNewName*)" -Properties $attributesC | select $attributesC | ft
+Get-ADUser     -LDAPFilter "(sAMAccountName=*$sNewName*)"   -Properties $attributesU | select $attributesU | ft
+
+#$sNewName = "20221027"
+
+$NewAS2GoUsers = Get-ADUser -LDAPFilter "(sAMAccountName=*$sNewName*)" 
+Foreach ($trustee in $NewAS2GoUsers)
+{
+  Write-Host $trustee.samAccountname "is now member of the following groups:" -ForegroundColor Yellow
+  Get-ADPrincipalGroupMembership -Identity $trustee.samAccountname | ft name, GroupCategory, GroupScope, sid
+}
+
+
+
 
 
 $MyScript = $MyInvocation.MyCommand.Definition
