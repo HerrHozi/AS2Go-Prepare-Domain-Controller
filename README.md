@@ -1,24 +1,34 @@
 # AS2Go-Setup-Domain-Controller
-Files to prepare the AS2GO | Domain Controller Setup. AS2Go is an acronym for Attack Scenario To Go. 
+Files to prepare the AS2Go | Domain Controller Setup. AS2Go is an acronym for Attack Scenario To Go. 
 
 Find more information here in my blog post [AS2Go | Lab Setup | Domain Controller](https://herrhozi.com/2022/01/04/as2go-lab-setup-domain-controller/). 
 
 ## Quick Start Guide
-Open a Admin PowerShell terminal from the Windows command.
+Open a PowerShell Shell as Administrator
+
+### STEP #1 - Create the AS2Go OU Structure
+
+The following command will automatically create the required OU structure.
+```PowerShell
+New-AS2GoOus.ps1 
+```
+![New-AS2GoOUs](https://user-images.githubusercontent.com/96825160/198332993-21f8cd80-513c-4fe5-9a9c-6aa590aa51c6.gif)
+
+
+### STEP #2 Create a subset of dummy users
 
 The following command will automatically create a set of users based on the current date.
 ```PowerShell
-AS2GO-create-users.ps1
+New-AS2GoUsers.ps1 
 ```
 
 The following command will automatically create a set of users based on the current date and time 
 ```PowerShell
-AS2GO-create-users.ps1 -Shortname n
+New-AS2GoUsers -Shortname n
 ```
 
 The following command will automatically create a set of users based on an predefined name
 ```PowerShell
-AS2GO-create-users.ps1 -Shortname HerrHozi
+New-AS2GoUsers -Shortname HerrHozi
 ```
-
-![image](https://user-images.githubusercontent.com/96825160/148137999-90d65163-29d8-488e-8be7-0922c23762c0.png)
+![New-AS2GoUsers](https://user-images.githubusercontent.com/96825160/198341525-9ce6c7bc-3d91-4e6e-b231-0c0a699dc767.gif)

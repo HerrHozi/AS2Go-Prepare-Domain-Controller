@@ -17,15 +17,15 @@ moves the groups into the corresponding OUs and set the DENY permissions on the 
 
 .NOTES
 
-last update: 2022-10-22
-File Name  : AS2GO-create-OUs.ps1 | Version 2.5.1
+last update: 2022-10-27
+File Name  : New-AS2GoOUs.ps1 | Version 2.5.2
 Author     : Holger Zimmermann | @HerrHozi
 
 
 .EXAMPLE
 
 PS> cd C:\temp\AS2GO
-PS> .\AS2GO-create-OUs.ps1
+PS> .\New-AS2GoOUs.ps1
 
 
 .LINK
