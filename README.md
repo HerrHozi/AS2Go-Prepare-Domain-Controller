@@ -8,9 +8,9 @@ Open a PowerShell Shell as Administrator
 
 ### STEP #1 - Create the AS2Go OU Structure
 
-The following command will automatically create a set of users based on the current date.
+The following command will automatically create the required OU structure.
 ```PowerShell
-New-AS2GoUsers.ps1 
+New-AS2GoOus.ps1 
 ```
 
 The following command will automatically create a set of users based on the current date and time 
