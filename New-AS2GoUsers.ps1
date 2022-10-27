@@ -1,10 +1,10 @@
 <#
 .SYNOPSIS
-Create three accounts (Victim, Helpdesk & Domain Admin) for the attack demo.
+Create four accounts (Victim, Helpdesk (2x) & Domain Admin) for the attack demo.
 
 .DESCRIPTION
 
-Based on the Tutorial: Setup a Microsoft Defender for Identity security alert lab
+These accounts are needed for the attack.
 
 
 .NOTES
