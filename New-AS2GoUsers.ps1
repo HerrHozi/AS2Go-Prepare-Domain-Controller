@@ -9,10 +9,10 @@ These accounts are needed for the attack.
 
 .NOTES
 
-last update: 2022-10-27
-File Name  : New-AS2GoUsers.ps1 | Version 2.5.2
+last update: 2022-10-28
+File Name  : New-AS2GoUsers.ps1 | Version 2.5.3
 Author     : Holger Zimmermann | @HerrHozi
-
+https://herrhozi.com
 
 .PARAMETER Shortname
 
@@ -83,9 +83,9 @@ $sUPNSuffix = "@HerrHozi.com"
 
 # Store the user passwords as variables
 $master = '1q2w3e$R'
-$DASecurePass = ConvertTo-SecureString -String $master+'da' -AsPlainText -Force
-$HDSecurePass = ConvertTo-SecureString -String $master+'hd' -AsPlainText -Force
-$VISecurePass = ConvertTo-SecureString -String $master+'vi' -AsPlainText -Force
+$DASecurePass = ConvertTo-SecureString -String $master'da' -AsPlainText -Force
+$HDSecurePass = ConvertTo-SecureString -String $master'hd' -AsPlainText -Force
+$VISecurePass = ConvertTo-SecureString -String $master'vi' -AsPlainText -Force
 
 # Manager's must exist in the AD
 $DAManager = (get-aduser -filter * | Get-Random).samaccountname # "Holger"
