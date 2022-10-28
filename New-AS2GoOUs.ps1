@@ -276,7 +276,7 @@ Get-ADGroup -Filter * -Properties * | where {
 
 
 
-$OUdn = ("OU="+$TieringOUName[0].Name+",OU=$AS2GoOU,$RootOU")
+$OUdn = ("OU=Groups,OU="+$TieringOUName[0].Name+",OU=$AS2GoOU,$RootOU")
 $group = $AS2GoGroups[2].name
 
 Write-Host "Finally set DENY permission on $OUdn for $group" -ForegroundColor yellow -NoNewline
