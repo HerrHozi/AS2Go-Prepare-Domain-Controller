@@ -17,10 +17,10 @@ moves the groups into the corresponding OUs and set the DENY permissions on the 
 
 .NOTES
 
-last update: 2022-10-27
-File Name  : New-AS2GoOUs.ps1 | Version 2.5.2
+last update: 2022-10-28
+File Name  : New-AS2GoOUs.ps1 | Version 2.5.3
 Author     : Holger Zimmermann | @HerrHozi
-
+https://herrhozi.com
 
 .EXAMPLE
 
@@ -194,6 +194,7 @@ Write-Host "    Created Parent OU " -NoNewline;Write-Host $TieringOUName[$i].Nam
      $exist = (Get-ADGroup -Filter * | where {$_.name -eq $newGroup})
      If ($exist -ne $null){
         Get-ADGroup -Filter * | where {$_.name -eq $newGroup} | Move-ADObject -TargetPath "OU=$ouGroups,$ShortDNPAth"
+        Get-ADGroup -Filter * | where {$_.name -eq $newGroup} | Set-ADGroup -Description $AS2GoGroups[$i].Description
      }
      else
      {
