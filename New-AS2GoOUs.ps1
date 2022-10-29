@@ -17,8 +17,8 @@ moves the groups into the corresponding OUs and set the DENY permissions on the 
 
 .NOTES
 
-last update: 2022-10-28
-File Name  : New-AS2GoOUs.ps1 | Version 2.5.3
+last update: 2022-10-30
+File Name  : New-AS2GoOUs.ps1 | Version 2.5.5
 Author     : Holger Zimmermann | @HerrHozi
 https://herrhozi.com
 
