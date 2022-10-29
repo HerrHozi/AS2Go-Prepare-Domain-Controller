@@ -9,8 +9,8 @@ These accounts are needed for the attack.
 
 .NOTES
 
-last update: 2022-10-28
-File Name  : New-AS2GoUsers.ps1 | Version 2.5.3
+last update: 2022-10-30
+File Name  : New-AS2GoUsers.ps1 | Version 2.5.5
 Author     : Holger Zimmermann | @HerrHozi
 https://herrhozi.com
 
@@ -273,7 +273,7 @@ if ($DomainAdmin -eq 'y')
 
   #create new computer object
   $NewComputer = "SRV-$sNewName"
-  New-ADComputer -Name $NewComputer -Description "needed for Kerberoasting Attack" -Path $AS2GoUser[0].ComputerPath  -Location $sNewName -OperatingSystem "Windows Server 2019"
+  New-ADComputer -Name $NewComputer -Description "needed for Kerberoasting Attack" -Path $AS2GoUser[0].ComputerPath  -Location $sNewName -OperatingSystem "Windows Server 2019 Standard"
   
   #set ServicePrincipalNames to a random service
   $service = $services | get-Random
