@@ -9,8 +9,8 @@ These accounts are needed for the attack.
 
 .NOTES
 
-last update: 2022-11-01
-File Name  : New-AS2GoUsers.ps1 | Version 2.5.6
+last update: 2022-11-24
+File Name  : New-AS2GoUsers.ps1 | Version 2.6.0 (Preview)
 Author     : Holger Zimmermann | @HerrHozi
 https://herrhozi.com
 
@@ -54,7 +54,7 @@ https://herrhozi.com
 
 #Requires -RunAsAdministrator
 
-param([string] $DomainAdmin='y', [string] $HelpDesk='y', [string] $Victim='y', [string] $Shortname='y')
+param([string] $Shortname='y',[switch]$SkipDomainAdmin,[switch]$SkipHelpDesk, [switch]$SkipVictim )
 
 #get current Posh Name & path
 $PoSHPath    = Get-Location
@@ -172,7 +172,7 @@ $sNewUserPrincipalName = ($sNewName + $sUPNSuffix)
 Write-Host "`nStart creating 4 users for use case '$sNewName'. Accounts expire after $TimeSpan days`n" -ForegroundColo Yellow
 
 
-if ($Victim -eq 'y')
+if ($SkipVictim -eq $false)
   {
   # create Victim User (like VI-HerrHozi)
   # =========================================
@@ -193,7 +193,7 @@ if ($Victim -eq 'y')
   }
 
   
-if ($HelpDesk -eq 'y')
+if ($SkipHelpDesk -eq $false)
   {
   # create Helpdesk User (like HD-HerrHozi)
   # =========================================
@@ -242,7 +242,7 @@ if ($HelpDesk -eq 'y')
   }
 
  
-if ($DomainAdmin -eq 'y')
+if ($SkipDomainAdmin -eq $false)
   {
   # create Domain Admin User (like DA-HerrHozi)
   # =============================================
