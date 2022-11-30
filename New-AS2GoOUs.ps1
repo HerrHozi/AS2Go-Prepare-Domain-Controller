@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
 
 Attack scenario to GO - along the kill-chain (AS2Go)
@@ -17,8 +17,8 @@ moves the groups into the corresponding OUs and set the DENY permissions on the 
 
 .NOTES
 
-last update: 2022-10-30
-File Name  : New-AS2GoOUs.ps1 | Version 2.5.5
+last update: 2022-12-01
+File Name  : New-AS2GoOUs.ps1 | Version 2.6.0
 Author     : Holger Zimmermann | @HerrHozi
 https://herrhozi.com
 

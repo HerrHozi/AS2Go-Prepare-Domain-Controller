@@ -9,8 +9,8 @@ These accounts are needed for the attack.
 
 .NOTES
 
-last update: 2022-11-24
-File Name  : New-AS2GoUsers.ps1 | Version 2.6.0 (Preview)
+last update: 2022-12-01
+File Name  : New-AS2GoUsers.ps1 | Version 2.6.0
 Author     : Holger Zimmermann | @HerrHozi
 https://herrhozi.com
 
@@ -21,14 +21,14 @@ Y - yyyyMMdd
 N - yyyyMMdd.hhmmss
 <your name> 
 
-.PARAMETER DomainAdmin
-Create an DA-xxxxx Domain Admin account. "y" is the default.
+.SWITCH SkipDomainAdmin
+Skip the creation of the DA-xxxxx Domain Admin account.
 
-.PARAMETER HelpDesk
-Create an HD-xxxxx HelpDesk account. "y" is the default.
+.SWITCH SkipHelpDesk
+Skip the creation of the HelpDesk account.
 
-.PARAMETER Victim
-Create an VI-xxxxx Victim account. "y" is the default.
+.SWITCH SkipVictim
+Skip the creation of the Victim account.
 
 .EXAMPLE
 PS> cd C:\Temp\AS2Go
@@ -41,7 +41,7 @@ PS> .\New-AS2GoUsers.ps1 -Shortname n
 PS> .\New-AS2GoUsers.ps1 -Shortname HerrHoZi
 
 .EXAMPLE
-PS> .\New-AS2GoUsers.ps1 -DomainAdmin y -HelpDesk y -Victim n -Shortname HerrHoZi
+PS> .\New-AS2GoUsers.ps1 -SkipVictim -Shortname HerrHoZi
 
 creates the only the domain admin & help desk account with an dedicated name, DA-HerrHoZi & HD-HerrHoZi
 
