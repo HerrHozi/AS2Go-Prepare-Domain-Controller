@@ -8,7 +8,7 @@ Open a PowerShell Shell as Administrator
 
 ### STEP #1 - Create the AS2Go OU Structure
 
-The following command will automatically create the required OU structure.
+Run the following command to create the required OU structure and AD Groups.
 ```PowerShell
 New-AS2GoOus.ps1 
 ```
