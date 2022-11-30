@@ -79,7 +79,7 @@ $RootOU = $ADRoot.defaultNamingContext
 $sUPNSuffix = "@HerrHozi.com"
 
 # Store the user passwords as variables
-$master = '1q2w3e$R'
+$master = 'PassW0rd'
 $DASecurePass = ConvertTo-SecureString -String $master'da' -AsPlainText -Force
 $HDSecurePass = ConvertTo-SecureString -String $master'hd' -AsPlainText -Force
 $VISecurePass = ConvertTo-SecureString -String $master'vi' -AsPlainText -Force
