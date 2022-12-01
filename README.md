@@ -1,7 +1,7 @@
 # AS2Go-Setup-Domain-Controller
 Files to prepare the AS2Go | Domain Controller Setup. AS2Go is an acronym for Attack Scenario To Go. 
 
-Find more information here in my blog post [AS2Go | Lab Setup | Domain Controller](https://herrhozi.com/2022/01/04/as2go-lab-setup-domain-controller/). 
+Find more information here in my blog post [AS2Go | Lab Setup | Domain Controller](https://herrhozi.com/as2go-lab-setup-1-3-dc/). 
 
 ## Quick Start Guide
 Open a PowerShell Shell as Administrator
